@@ -185,7 +185,8 @@ pub struct SimpleObject {
     pub generics: Generics,
     pub attrs: Vec<Attribute>,
     pub data: Data<Ignored, SimpleObjectField>,
-
+    #[darling(default)]
+    pub skip_derive: bool,
     #[darling(default)]
     pub internal: bool,
     #[darling(default)]
@@ -390,6 +391,8 @@ pub struct Union {
     // for OneofObject
     #[darling(default)]
     pub input_name: Option<String>,
+    #[darling(default)]
+    pub skip_derive: bool,
 }
 
 #[derive(FromVariant)]
@@ -400,6 +403,9 @@ pub struct UnionItem {
 
     #[darling(default)]
     pub flatten: bool,
+
+    #[darling(default)]
+    pub skip_derive: bool,
 }
 
 #[derive(FromField)]

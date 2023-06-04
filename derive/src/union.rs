@@ -89,8 +89,9 @@ pub fn generate(union_args: &args::Union) -> GeneratorResult<TokenStream> {
             let mut assert_ty = ty.clone();
             RemoveLifetime.visit_type_mut(&mut assert_ty);
 
-            if !variant.flatten {
-                type_into_impls.push(quote! {
+            if (!union_args.skip_derive) {
+                if !variant.flatten {
+                    type_into_impls.push(quote! {
                     #crate_name::static_assertions::assert_impl_one!(#assert_ty: #crate_name::ObjectType);
 
                     #[allow(clippy::all, clippy::pedantic)]
@@ -100,8 +101,8 @@ pub fn generate(union_args: &args::Union) -> GeneratorResult<TokenStream> {
                         }
                     }
                 });
-            } else {
-                type_into_impls.push(quote! {
+                } else {
+                    type_into_impls.push(quote! {
                     #crate_name::static_assertions::assert_impl_one!(#assert_ty: #crate_name::UnionType);
 
                     #[allow(clippy::all, clippy::pedantic)]
@@ -111,6 +112,7 @@ pub fn generate(union_args: &args::Union) -> GeneratorResult<TokenStream> {
                         }
                     }
                 });
+                }
             }
 
             if !variant.flatten {
